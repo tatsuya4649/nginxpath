@@ -58,6 +58,34 @@ nginxでは全部で、5つのプレフィックスが用意されている。
 
 実際にリクエストURIによって、Nginxのどのlocationディレクティブが適用されるのかをみていく。
 
+今回使用する、nginxサーバーのファイル構成
+
+```
+
+/usr/share/nginx
+
+|
+|------ html
+|	|
+|	|------ 404.html
+|	|
+|	|------ index.html
+|	|
+|	|------ 50x.html
+|
+|------ equalA
+|	|
+|	|------ equal.html
+|
+|------ nothing
+	|
+	|------ nothing.html
+
+
+```
+
+※ ポートは80番、ホストはlocalhost
+
 ## ルートの重複
 
 * nginxの設定
@@ -87,3 +115,11 @@ http://localhost:80/
 この場合、一見/usr/share/nginx/equal/equal.htmlを返すように見えるが、答えは**404 Error**。
 
 ![404.png](images/404.png)
+
+理由は、まずリクエストURIの評価はプレフィックス規則にしたがって、**location = / \{**が適用される。
+
+そして、rootの/usr/share/nginx/equalがルートになりますが、indexディレクティブにより内部リダイレクトが発生。 リクエストURIが**/equal.html**に変換され、再び評価される。すると、今度は**location / \{**が適用される。
+
+そしてrootの/usr/share/nginx/nothingがルートになりますが、そこにはequal.htmlがないので**404Error**が返される。
+
+ちなみに、location = / \{ でindexにnothing.htmlを指定していたとしても、rootディレクティブにより禁止閲覧により**403 Forbidden**が返される。
