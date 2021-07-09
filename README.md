@@ -162,3 +162,41 @@ nginx: [emerg] duplicate location "/" in /etc/nginx/conf.d/default.conf:13
 つまり、^~とプレフィックスなしのlocationディレクティブのURIは重複すると判定されるため。
 
 このことから、前方一致で使用できるパスは1つだけということになる。重複NG。
+
+## ルートの重複3
+
+* nginxの設定
+
+```
+
+location ~ ^/$ {
+	root /usr/share/nginx/index;
+	index index.html;
+}
+
+location / {
+	root /usr/share/nginx/nothing;
+}
+
+
+```
+
+* リクエストURL
+
+```
+
+http://localhost:80/
+
+```
+
+この場合の実行結果は、**404 Error**。
+
+![404.png](images/404.png)
+
+理由としては、
+
+まず完全一致と^~の2つと一致するリクエストURIはないので、正規表現が評価される。そこで一致する**^/$**ディレクティブが見つかり、そのコンテキストが適用される。
+
+すると、rootディレクティブで/usr/share/nginx/htmlがルートになるが、indexディレクティブにより、/index.htmlで内部リダイレクトが発生。今度は下のプレフィックスがないURIのコンテキストが適用され、index.htmlがないため**404 Error**が返される。
+
+
