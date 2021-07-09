@@ -116,9 +116,9 @@ http://localhost:80/
 
 ![404.png](images/404.png)
 
-理由は、まずリクエストURIの評価はプレフィックス規則にしたがって、**location = / \{**が適用される。
+理由は、まずリクエストURIの評価はプレフィックス規則にしたがって、location = / \{が適用される。
 
-そして、rootの/usr/share/nginx/equalがルートになりますが、indexディレクティブにより内部リダイレクトが発生。 リクエストURIが**/equal.html**に変換され、再び評価される。すると、今度は**location / \{**が適用される。
+そして、rootの/usr/share/nginx/equalがルートになりますが、indexディレクティブにより内部リダイレクトが発生。 リクエストURIが**/equal.html**に変換され、再び評価される。すると、今度はlocation / \{が適用される。
 
 そしてrootの/usr/share/nginx/nothingがルートになりますが、そこにはequal.htmlがないので**404Error**が返される。
 
