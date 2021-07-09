@@ -1,0 +1,7 @@
+#!/bin/bash
+
+docker container rm -f ng
+docker rmi -f ng
+
+docker build -t ng .
+docker run --name ng -d ng
