@@ -86,4 +86,4 @@ http://localhost:80/
 
 この場合、一見/usr/share/nginx/equal/equal.htmlを返すように見えるが、答えは**404 Error**。
 
-[!404.png](images/404.png)
+![404.png](images/404.png)
