@@ -123,3 +123,42 @@ http://localhost:80/
 そしてrootの/usr/share/nginx/nothingがルートになりますが、そこにはequal.htmlがないので**404Error**が返される。
 
 ちなみに、location = / \{ でindexにnothing.htmlを指定していたとしても、rootディレクティブにより禁止閲覧により**403 Forbidden**が返される。
+
+## ルートの重複2
+
+* nginxの設定
+
+```
+
+location ^~ / {
+	root /usr/share/nginx/index;
+	index index.html;
+}
+
+location / {
+	root /usr/share/nginx/nothing;
+}
+
+
+```
+
+* リクエストURL
+
+```
+
+http://localhost:80/
+
+```
+
+この場合、nginxの起動に失敗する。
+
+```
+
+2021/07/09 08:37:14 [emerg] 1#1: duplicate location "/" in /etc/nginx/conf.d/default.conf:13
+nginx: [emerg] duplicate location "/" in /etc/nginx/conf.d/default.conf:13
+
+```
+
+つまり、^~とプレフィックスなしのlocationディレクティブのURIは重複すると判定されるため。
+
+このことから、前方一致で使用できるパスは1つだけということになる。重複NG。
