@@ -53,3 +53,37 @@ nginxでは全部で、5つのプレフィックスが用意されている。
 
 **4. 404エラーを返す**
 
+
+# Example
+
+実際にリクエストURIによって、Nginxのどのlocationディレクティブが適用されるのかをみていく。
+
+## ルートの重複
+
+* nginxの設定
+
+```
+
+location = / {
+	root /usr/share/nginx/equal;
+	index equal.html;
+}
+
+location / {
+	root /usr/share/nginx/nothing;
+}
+
+
+```
+
+* リクエストURL
+
+```
+
+http://localhost:80/
+
+```
+
+この場合、一見/usr/share/nginx/equal/equal.htmlを返すように見えるが、答えは**404 Error**。
+
+[!404.png](images/404.png)
