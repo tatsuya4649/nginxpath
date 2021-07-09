@@ -3,9 +3,13 @@
 
 nginxの設定ファイルではlocationディレクティブでURIのパスごとの設定を記述することができる。
 
+```
+
 location / {
 	(this is context of location)
 }
+
+```
 
 nginxはこのlocationディレクティブに記載されたコンテキストを元にパスのルーティングをおこなう。
 
